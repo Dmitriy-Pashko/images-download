@@ -4,6 +4,7 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const request = require('request');
 const Image = require('../model/images');
+const sharp = require('sharp');
 
 const app = express();
 const router = express.Router();
@@ -33,7 +34,8 @@ let download = function(uri, filename, callback){
     console.log('content-type:', res.headers['content-type']);
     console.log('content-length:', res.headers['content-length']);
 
-    request(uri).pipe(fs.createWriteStream(filename)).on('close', callback);
+    let resizeStream = sharp().resize(320, 200);
+    request(uri).pipe(resizeStream).pipe(fs.createWriteStream(filename)).on('close', callback);
   });
 };
 
@@ -69,7 +71,7 @@ router.route('/images')
   })
 });
 
-app.use(express.static('../public/images'));
+// app.use(express.static(__dirname + 'public'));
 
 app.use('/api', router);
 

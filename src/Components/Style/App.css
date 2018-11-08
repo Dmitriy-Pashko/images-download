@@ -1,0 +1,20 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+.categories {
+  list-style: none;
+  display:flex;
+}
+
+.categories li {
+  margin: 0px 10px;
+}
+.categories li a {
+  font-size:20px;
+  color: black;
+}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios  from 'axios';
 import './Style/Form.css';
 
-class App extends Component {
+class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -26,19 +26,19 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        <div className="main-search">
-          <p>
-            Insert url of image you may want to save 
-          </p>
-          <form className="search-form" onSubmit={(e) => { this.handleSaveImage(e); }}>
-            <input className="input-bold" placeholder="Enter url of the image" name="url" onChange={this.handleChange}></input>
-            <button type="submit" className="submit-btn">Submit</button>
-          </form>
+        <div className="App">
+          <div className="main-search">
+            <p>
+              Insert url of image you may want to save 
+            </p>
+            <form className="search-form" onSubmit={(e) => { this.handleSaveImage(e); }}>
+              <input className="input-bold" placeholder="Enter url of the image" name="url" onChange={this.handleChange}></input>
+              <button type="submit" className="submit-btn">Submit</button>
+            </form>
+          </div>
         </div>
-      </div>
     );
   }
 }
 
-export default App;
+export default Form;
