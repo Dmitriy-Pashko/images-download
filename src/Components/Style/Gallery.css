@@ -29,6 +29,8 @@ h1 {
 }
 
 .image-wrapper img {
-  border-radius: 0 40px;
+  width: 320px;
+  height: 320px;
 }
+
 

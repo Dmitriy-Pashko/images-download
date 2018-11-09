@@ -33,3 +33,10 @@
   border-radius: 0px 10px 10px 0px;
   cursor:pointer;
 }
+
+.popup{
+  padding: 10px 10px;
+  border-radius:10px;
+  background-color:rgb(240, 248, 255, 0.5);
+  color:black;
+}

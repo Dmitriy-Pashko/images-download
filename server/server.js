@@ -1,10 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const fs = require('fs');
-const request = require('request');
 const Image = require('../model/images');
-const sharp = require('sharp');
+const download = require('../controller/download');
 
 const app = express();
 const router = express.Router();
@@ -29,16 +27,6 @@ function sendError(res) {
   };
 }
 
-let download = function(uri, filename, callback){
-  request.head(uri, function(err, res, body){
-    console.log('content-type:', res.headers['content-type']);
-    console.log('content-length:', res.headers['content-length']);
-
-    let resizeStream = sharp().resize(320, 200);
-    request(uri).pipe(resizeStream).pipe(fs.createWriteStream(filename)).on('close', callback);
-  });
-};
-
 router.route('/images')
 .get(function (req, res) {
 
@@ -50,28 +38,40 @@ router.route('/images')
     .catch(sendError(res));
 })
 .post(function (req, res) {
-  console.log(req.body);
+
   let findName = req.body.url.split('/');
   let name = findName[findName.length - 1];
 
-  let path = `./public/images/${name}`
+  let path = `./public/images/${name}`;
 
-  download(req.body.url, path, function(){
-    let image = new Image({
-      name:name,
-      url:req.body.url,
-    })
+  Image.findOne({
+    url:req.body.url,
+  },(err, img) => {
+    if (err) throw err;
 
-    image.save()
-      .then((newImage) => {
-        res.send(newImage);
-      })
-      .catch(sendError(res));
-    console.log('done');
+    if(img){
+      res.send('You alredy have this image in the gallery');
+    } else if(req.body.url.match(/\.(jpeg|jpg|png)$/) !== null){
+      download(req.body.url, path, function(){
+        let image = new Image({
+          name:name,
+          url:req.body.url,
+        })
+  
+        image.save()
+          .then(() => {
+            return res.send("Image downloded, you can check it by going to the gallery");
+          })
+          .catch(sendError(res));
+        console.log('done');
+      }) 
+    } else {
+      res.send("You have to insert imges with certain extantions, remember?")
+    }
   })
 });
 
-// app.use(express.static(__dirname + 'public'));
+app.use(express.static(__dirname + 'public'));
 
 app.use('/api', router);
 
